@@ -1,0 +1,341 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────────────────────────────────────────
+   FONTS
+───────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
+
+/* ─────────────────────────────────────────────────────────
+   CSS VARIABLES  (shadcn-compatible + EduChain palette)
+───────────────────────────────────────────────────────── */
+:root {
+  /* shadcn tokens — light mode (used by dashboard) */
+  --background: 0 0% 100%;
+  --foreground: 0 0% 3.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 3.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 3.9%;
+  --primary: 262 80% 62%;          /* violet-500 */
+  --primary-foreground: 0 0% 98%;
+  --secondary: 262 30% 96%;        /* soft violet tint */
+  --secondary-foreground: 262 50% 30%;
+  --muted: 0 0% 96.1%;
+  --muted-foreground: 0 0% 45.1%;
+  --accent: 262 30% 94%;
+  --accent-foreground: 262 60% 35%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 0 0% 90%;
+  --input: 0 0% 90%;
+  --ring: 262 80% 62%;
+  --radius: 0.75rem;
+
+  /* EduChain palette tokens */
+  --ec-bg-dark:       #09051c;
+  --ec-bg-light:      #f6f4ff;      /* very soft violet-white — matches dashboard bg */
+  --ec-surface:       #ffffff;
+  --ec-border-light:  #ede9fe;      /* violet-100 */
+  --ec-violet:        #8b5cf6;      /* violet-500 */
+  --ec-violet-dark:   #6d28d9;      /* violet-700 */
+  --ec-violet-mid:    #7c3aed;      /* violet-600 */
+  --ec-violet-light:  #c4b5fd;      /* violet-300 */
+  --ec-violet-xlight: #ede9fe;      /* violet-100 */
+  --ec-violet-muted:  rgba(139,92,246,0.12);
+  --ec-text:          #1e1b4b;      /* indigo-950 */
+  --ec-text-muted:    #6b7280;
+  --ec-text-dimmer:   #9ca3af;
+
+  /* sidebar accent (matches purple pill in screenshot) */
+  --ec-sidebar-active-bg:   #f3f0ff;
+  --ec-sidebar-active-text: #6d28d9;
+}
+
+.dark {
+  --background: 0 0% 3.9%;
+  --foreground: 0 0% 98%;
+  --card: 0 0% 3.9%;
+  --card-foreground: 0 0% 98%;
+  --popover: 0 0% 3.9%;
+  --popover-foreground: 0 0% 98%;
+  --primary: 262 80% 62%;
+  --primary-foreground: 0 0% 9%;
+  --secondary: 0 0% 14.9%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 0 0% 14.9%;
+  --muted-foreground: 0 0% 63.9%;
+  --accent: 0 0% 14.9%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 0 0% 14.9%;
+  --input: 0 0% 14.9%;
+  --ring: 262 80% 62%;
+}
+
+/* ─────────────────────────────────────────────────────────
+   BASE STYLES
+───────────────────────────────────────────────────────── */
+@layer base {
+  * { @apply border-border; }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'DM Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    /* ✅ CURSOR FIX: default cursor restored globally.
+       Custom cursor is scoped to .ec-landing only. */
+    cursor: auto;
+  }
+
+  h1, h2, h3 { font-family: 'Syne', sans-serif; }
+}
+
+/* ─────────────────────────────────────────────────────────
+   CURSOR — scoped to landing page wrapper ONLY
+   (dashboard and other routes keep normal cursor)
+───────────────────────────────────────────────────────── */
+.ec-landing,
+.ec-landing * {
+  cursor: none !important;
+}
+
+/* ─────────────────────────────────────────────────────────
+   KEYFRAME ANIMATIONS
+───────────────────────────────────────────────────────── */
+
+/* Gradient text shimmer */
+@keyframes ec-shimmer {
+  0%   { background-position: 0%   center; }
+  100% { background-position: 200% center; }
+}
+
+/* Pulsing glow dot */
+@keyframes ec-pulse {
+  0%, 100% { opacity: 1;   box-shadow: 0 0 0 0   rgba(139,92,246,0.55); }
+  50%       { opacity: 0.7; box-shadow: 0 0 0 8px rgba(139,92,246,0);   }
+}
+
+/* Scroll cue bounce */
+@keyframes ec-bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0);     }
+  50%       { transform: translateX(-50%) translateY(10px);  }
+}
+
+/* Slow spin (decorative rings, avatar rings) */
+@keyframes ec-spin {
+  from { transform: translate(-50%,-50%) rotate(0deg);   }
+  to   { transform: translate(-50%,-50%) rotate(360deg); }
+}
+
+/* Avatar ring — doesn't need the translate offset */
+@keyframes ec-spin-simple {
+  from { transform: rotate(0deg);   }
+  to   { transform: rotate(360deg); }
+}
+
+/* Marquee */
+@keyframes ec-marquee {
+  from { transform: translateX(0);        }
+  to   { transform: translateX(-33.333%); }
+}
+
+/* Modal pop-in */
+@keyframes ec-modal-in {
+  from { opacity: 0; transform: scale(0.88) translateY(28px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0);    }
+}
+
+/* Generic fade-up (hero stagger) */
+@keyframes ec-fadein-up {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* Floating */
+@keyframes ec-float {
+  0%, 100% { transform: translateY(0px);   }
+  50%       { transform: translateY(-12px); }
+}
+
+/* Orb slow drift */
+@keyframes ec-drift {
+  0%, 100% { transform: translate(-50%,-50%) scale(1);    }
+  33%       { transform: translate(-50%,-52%) scale(1.04); }
+  66%       { transform: translate(-52%,-49%) scale(0.97); }
+}
+
+/* Light-mode card shimmer sweep on hover */
+@keyframes ec-sweep {
+  from { left: -60%; }
+  to   { left: 120%;  }
+}
+
+/* Stat count-up glow pulse */
+@keyframes ec-stat-glow {
+  0%, 100% { text-shadow: 0 0 0 transparent; }
+  50%       { text-shadow: 0 0 24px rgba(139,92,246,0.45); }
+}
+
+/* ─────────────────────────────────────────────────────────
+   FEATURE CARD — hover glow + shimmer sweep
+───────────────────────────────────────────────────────── */
+.ec-card-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at 50% 0%, rgba(139,92,246,0.10), transparent 65%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+  z-index: 0;
+}
+*:hover > .ec-card-glow {
+  opacity: 1;
+}
+
+/* Light-mode card shimmer streak */
+.ec-card-shimmer {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 40%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent);
+  transform: skewX(-20deg);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.1s;
+  z-index: 1;
+}
+*:hover > .ec-card-shimmer {
+  opacity: 1;
+  animation: ec-sweep 0.55s ease forwards;
+}
+
+/* ─────────────────────────────────────────────────────────
+   TEAM CARD — reveal CTA on hover
+───────────────────────────────────────────────────────── */
+button:hover .ec-team-cta {
+  opacity: 1 !important;
+}
+
+/* ─────────────────────────────────────────────────────────
+   SCROLLBAR  (dark for landing, light for dashboard)
+───────────────────────────────────────────────────────── */
+::-webkit-scrollbar       { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(139,92,246,0.3);
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(139,92,246,0.55); }
+
+/* ─────────────────────────────────────────────────────────
+   TEXT SELECTION
+───────────────────────────────────────────────────────── */
+::selection {
+  background: rgba(139,92,246,0.28);
+  color: inherit;
+}
+
+/* ─────────────────────────────────────────────────────────
+   SMOOTH SCROLL + LAYOUT
+───────────────────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+  overflow-y: scroll;   /* prevent layout shift from scrollbar */
+}
+
+section[id] {
+  scroll-margin-top: 80px;
+}
+
+/* ─────────────────────────────────────────────────────────
+   FOCUS RING
+───────────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid rgba(139,92,246,0.65);
+  outline-offset: 3px;
+}
+
+/* ─────────────────────────────────────────────────────────
+   AUTOFILL RESET — dark modal inputs
+───────────────────────────────────────────────────────── */
+.ec-landing input:-webkit-autofill,
+.ec-landing input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #0f0a24 inset !important;
+  -webkit-text-fill-color: #fff !important;
+  caret-color: #fff;
+}
+
+/* ─────────────────────────────────────────────────────────
+   DASHBOARD / LIGHT PAGES — ensure normal pointer
+───────────────────────────────────────────────────────── */
+body:not(:has(.ec-landing)) *,
+.ec-dashboard,
+.ec-dashboard * {
+  cursor: auto;
+}
+button, a, [role="button"] {
+  /* restore pointer in non-landing contexts */
+}
+/* More targeted: anywhere outside .ec-landing, restore pointer for clickables */
+body:not(.ec-landing-active) button,
+body:not(.ec-landing-active) a,
+body:not(.ec-landing-active) input,
+body:not(.ec-landing-active) select,
+body:not(.ec-landing-active) textarea,
+body:not(.ec-landing-active) [role="button"] {
+  cursor: auto;
+}
+.ec-landing button,
+.ec-landing a,
+.ec-landing input,
+.ec-landing select,
+.ec-landing textarea {
+  cursor: none !important;
+}
+
+/* ─────────────────────────────────────────────────────────
+   RESPONSIVE
+───────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  nav > div:nth-child(2) { display: none; }
+  nav { padding: 14px 20px !important; }
+}
+
+/* ─────────────────────────────────────────────────────────
+   LIGHT THEME UTILITY CLASSES
+   (matches dashboard's soft violet palette)
+───────────────────────────────────────────────────────── */
+
+/* Soft violet card — matches dashboard stat cards */
+.ec-light-card {
+  background: #ffffff;
+  border: 1px solid #ede9fe;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(109,40,217,0.06), 0 4px 16px rgba(109,40,217,0.04);
+}
+
+/* Sidebar active item style */
+.ec-sidebar-active {
+  background: var(--ec-sidebar-active-bg);
+  color: var(--ec-sidebar-active-text);
+  font-weight: 600;
+  border-radius: 12px;
+}
+
+/* Purple gradient button — used in quick actions */
+.ec-action-btn {
+  background: linear-gradient(135deg, #f3f0ff, #ede9fe);
+  color: #6d28d9;
+  border: 1px solid #ddd6fe;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+.ec-action-btn:hover {
+  background: linear-gradient(135deg, #ede9fe, #ddd6fe);
+  box-shadow: 0 4px 16px rgba(109,40,217,0.12);
+  transform: translateX(2px);
+}
